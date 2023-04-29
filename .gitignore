@@ -1,0 +1,7 @@
+Makefile
+sdlsnake
+libsnake.a
+CMakeCache.txt
+cmake_install.cmake
+.vscode/
+CMakeFiles/
