@@ -8,12 +8,12 @@
 
 #include "snake.hpp"
 
-const float FPS = 60;
+const float FPS = 240;
 const float FPS_DELAY = 1 / FPS;
 
 const int WIDTH = 600;
 const int HEIGHT = 600;
-const int GRID_SIZE = 10;
+const int GRID_SIZE = 15;
 
 long frame_count = 0;
 int score = 0;
@@ -58,13 +58,13 @@ int main() {
         std::vector<int> draw_body_y(std::begin(game.snake.body_y), std::end(game.snake.body_y));
 
         const Uint8 * keys = SDL_GetKeyboardState(NULL);
-        if (keys[SDL_SCANCODE_DOWN]) {
+        if (keys[SDL_SCANCODE_DOWN] && game.snake.direction != Up) {
             game.snake.direction = Down;
-        } else if (keys[SDL_SCANCODE_UP]) {
+        } else if (keys[SDL_SCANCODE_UP] && game.snake.direction != Down) {
             game.snake.direction = Up;
-        } else if (keys[SDL_SCANCODE_RIGHT]) {
+        } else if (keys[SDL_SCANCODE_RIGHT] && game.snake.direction != Left) {
             game.snake.direction = Right;
-        } else if (keys[SDL_SCANCODE_LEFT]) {
+        } else if (keys[SDL_SCANCODE_LEFT] && game.snake.direction != Right) {
             game.snake.direction = Left;
         }
 
@@ -75,15 +75,15 @@ int main() {
             }
         }        
         
-        if(frame_count % 4 == 0) {
+        if(frame_count % 20 == 0) {
             SDL_RenderClear(renderer.get());
             SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255);
             SDL_RenderFillRect(renderer.get(), &appleRect);   
             for (int i=0; i<draw_body_x.size(); i++) {
                 if(i % 2 == 0) {
-                    SDL_SetRenderDrawColor(renderer.get(), 0, 127, 0, 255);
-                } else {
                     SDL_SetRenderDrawColor(renderer.get(), 0, 200, 0, 255);
+                } else {
+                    SDL_SetRenderDrawColor(renderer.get(), 0, 127, 0, 255);
                 }
                 snakeRect.x = draw_body_x[i] * GRID_SIZE;
                 snakeRect.y = draw_body_y[i] * GRID_SIZE;
@@ -98,10 +98,12 @@ int main() {
             SDL_RenderPresent(renderer.get());
 
             if (game.tick(score)) {
+                SDL_Delay(1000);
                 run = false;
             }
 
             if (game.snake.x < 0 || game.snake.x > WIDTH / GRID_SIZE - 1 || game.snake.y < 0 || game.snake.y > HEIGHT / GRID_SIZE - 1) {
+                SDL_Delay(1000);
                 run = false;
             }
         }

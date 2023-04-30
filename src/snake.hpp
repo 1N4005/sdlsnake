@@ -4,8 +4,8 @@
 #include <list>
 #include <tuple>
 
-const int GAME_WIDTH = 60;
-const int GAME_HEIGHT = 60;
+const int GAME_WIDTH = 40;
+const int GAME_HEIGHT = 40;
 
 enum Direction {
     Up,

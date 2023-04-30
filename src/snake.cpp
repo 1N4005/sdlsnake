@@ -2,12 +2,20 @@
 #include <list>
 #include <cstdlib>
 #include <chrono>
-#include <algorithm>
 #include <vector>
 #include <iterator>
 
-inline bool Contains(const std::vector<int> &list, int x) {
-	return std::find(list.begin(), list.end(), x) != list.end();
+inline bool Contains(std::list<int> list, int x, int &index) {
+    int i = 0;
+    for(auto iter = list.begin(); iter != list.end(); iter++) {
+        if(*iter == x) {
+            index = i;
+            return true;
+        }
+        i++;
+    }
+    index = -1;
+	return false;
 }
 
 Snake::Snake() {
@@ -44,22 +52,23 @@ SnakeGame::SnakeGame() {
 }
 
 bool SnakeGame::tick(int &score) {
-
     this->snake.tick();
+
+    int x;
+    int y;
+    if(Contains(snake.body_x, snake.x, x) && Contains(snake.body_y, snake.y, y)) {
+        if(x == y) {
+            return true;
+        } 
+    }
+
     if (this->snake.x == this->apple_x && this->snake.y == this->apple_y) {
         score++;
         this->place_apple();
     } else {
         this->snake.body_x.pop_front();
         this->snake.body_y.pop_front();
-    }
-
-    std::vector<int> hit_detect_x(std::begin(snake.body_x), std::end(snake.body_x));
-    std::vector<int> hit_detect_y(std::begin(snake.body_y), std::end(snake.body_y));
-
-    if(Contains(hit_detect_x, snake.x) && Contains(hit_detect_y, snake.y)) {
-        return true;
-    }
+    }    
 
     this->snake.body_x.push_back(snake.x);
     this->snake.body_y.push_back(snake.y);
