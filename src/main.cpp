@@ -8,8 +8,8 @@
 
 #include "snake.hpp"
 
-const float FPS = 240;
-const float FPS_DELAY = 1 / FPS;
+const float POLLING_RATE = 960;
+const float POLLING_RATE_DELAY = 1 / POLLING_RATE;
 
 const int WIDTH = 600;
 const int HEIGHT = 600;
@@ -75,7 +75,7 @@ int main() {
             }
         }        
         
-        if(frame_count % 20 == 0) {
+        if(frame_count % 80 == 0) {
             SDL_RenderClear(renderer.get());
             SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255);
             SDL_RenderFillRect(renderer.get(), &appleRect);   
@@ -111,8 +111,8 @@ int main() {
         auto end = std::chrono::high_resolution_clock::now();
         long duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-        if((duration < FPS_DELAY * 1000000)) {
-            SDL_Delay(FPS_DELAY * 1000 - duration / 1000);
+        if((duration < POLLING_RATE_DELAY * 1000000)) {
+            SDL_Delay(POLLING_RATE_DELAY * 1000 - duration / 1000);
         }
         frame_count++;
     }

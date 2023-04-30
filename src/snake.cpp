@@ -4,17 +4,16 @@
 #include <chrono>
 #include <vector>
 #include <iterator>
+#include <iostream>
 
-inline bool Contains(std::list<int> list, int x, int &index) {
-    int i = 0;
-    for(auto iter = list.begin(); iter != list.end(); iter++) {
-        if(*iter == x) {
-            index = i;
+inline bool check_collision(std::list<int> list1, std::list<int> list2, int x, int y) {
+    auto iter1 = list1.begin();
+    auto iter2 = list2.begin();
+    for(; iter1 != list1.end() && iter2 != list2.end(); iter1++, iter2++) {
+        if (*iter1 == x && *iter2 == y) {
             return true;
         }
-        i++;
     }
-    index = -1;
 	return false;
 }
 
@@ -54,12 +53,9 @@ SnakeGame::SnakeGame() {
 bool SnakeGame::tick(int &score) {
     this->snake.tick();
 
-    int x;
-    int y;
-    if(Contains(snake.body_x, snake.x, x) && Contains(snake.body_y, snake.y, y)) {
-        if(x == y) {
-            return true;
-        } 
+    if(check_collision(snake.body_x, snake.body_y, snake.x, snake.y)) {
+        std::cout << "oh no\n";
+        return true;
     }
 
     if (this->snake.x == this->apple_x && this->snake.y == this->apple_y) {
